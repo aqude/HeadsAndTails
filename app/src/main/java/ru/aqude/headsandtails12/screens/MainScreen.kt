@@ -1,5 +1,6 @@
 package ru.aqude.headsandtails12.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Text
@@ -8,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -15,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.aqude.headsandtails12.R
 
 @Composable
 fun MainPreview() {
@@ -30,7 +33,6 @@ fun Main(money: List<String>, moneyState: String, onMoneyStateChanged: (String) 
     var result: String by remember {
         mutableStateOf("")
     }
-
 
     LaunchedEffect(moneyState) {
         result = moneyState
@@ -48,12 +50,24 @@ fun Main(money: List<String>, moneyState: String, onMoneyStateChanged: (String) 
 
 @Composable
 fun MainComponent(result: String) {
+    val tails = R.drawable.heads // решка
+    val heads = R.drawable.heads // орел
+
     Box(modifier = Modifier.padding(top = 100.dp)) {
-        Text(
-            text = result,
-            fontWeight = FontWeight.Bold,
-            fontSize = 50.sp
-        )
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = result,
+                fontWeight = FontWeight.Bold,
+                fontSize = 50.sp
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+
+            if (result == "Решка") {
+                Image(painter = painterResource(id = tails), contentDescription = "решка")
+            } else if (result == "Орел") {
+                Image(painter = painterResource(id = heads), contentDescription = "орел")
+            }
+        }
     }
 }
 
