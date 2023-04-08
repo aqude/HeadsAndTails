@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import ru.aqude.headsandtails12.screens.MainScreen
+import ru.aqude.headsandtails12.screens.MainPreview
 import ru.aqude.headsandtails12.ui.theme.HeadsAndTails12Theme
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HeadsAndTails12Theme {
-                MainScreen()
+                MainPreview()
             }
         }
     }
