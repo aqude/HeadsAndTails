@@ -61,8 +61,6 @@ fun BottomComponent(money: List<String>, onMoneyStateChanged: (String) -> Unit) 
     var time by remember {
         mutableStateOf(3)
     }
-
-
     val randomMoney = money.random()
     Box(modifier = Modifier.padding(bottom = 40.dp)) {
         ExtendedFloatingActionButton(
@@ -78,16 +76,15 @@ fun BottomComponent(money: List<String>, onMoneyStateChanged: (String) -> Unit) 
             },
             onClick = {
                 CoroutineScope(Dispatchers.Main).launch {
-                    while (time > 0) {
+                    while (time != 0) {
                         onMoneyStateChanged(time.toString())
                         delay(1000)
                         time--
                     }
-
                     onMoneyStateChanged(randomMoney)
-
                     delay(3000)
                     onMoneyStateChanged("")
+                    time = 3
                 }
             })
     }
