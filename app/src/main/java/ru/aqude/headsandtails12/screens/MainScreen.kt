@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen() {
+fun MainPreview() {
     val money = listOf("Решка", "Орел")
     var moneyState by remember {
         mutableStateOf("")
@@ -31,22 +31,24 @@ fun Main(money: List<String>, moneyState: String, onMoneyStateChanged: (String) 
         mutableStateOf("")
     }
 
+
+    LaunchedEffect(moneyState) {
+        result = moneyState
+    }
+
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
         MainComponent(result)
-        BottomComponent(money) { newMoneyState ->
-            result = newMoneyState
-            onMoneyStateChanged(newMoneyState)
-        }
+        BottomComponent(money, onMoneyStateChanged)
     }
 }
 
 @Composable
 fun MainComponent(result: String) {
-    Box(modifier = Modifier.padding(top = 250.dp)) {
+    Box(modifier = Modifier.padding(top = 100.dp)) {
         Text(
             text = result,
             fontWeight = FontWeight.Bold,
@@ -55,11 +57,13 @@ fun MainComponent(result: String) {
     }
 }
 
-
 @Composable
 fun BottomComponent(money: List<String>, onMoneyStateChanged: (String) -> Unit) {
     var time by remember {
         mutableStateOf(3)
+    }
+    var isButtonActive by remember {
+        mutableStateOf(true)
     }
     val randomMoney = money.random()
     Box(modifier = Modifier.padding(bottom = 40.dp)) {
@@ -75,16 +79,20 @@ fun BottomComponent(money: List<String>, onMoneyStateChanged: (String) -> Unit) 
                 )
             },
             onClick = {
-                CoroutineScope(Dispatchers.Main).launch {
-                    while (time != 0) {
-                        onMoneyStateChanged(time.toString())
-                        delay(1000)
-                        time--
+                if (isButtonActive) {
+                    isButtonActive = false
+                    CoroutineScope(Dispatchers.Main).launch {
+                        while (time != 0) {
+                            onMoneyStateChanged(time.toString())
+                            delay(1000)
+                            time--
+                        }
+                        onMoneyStateChanged(randomMoney)
+                        delay(3000)
+                        onMoneyStateChanged("")
+                        time = 3
+                        isButtonActive = true
                     }
-                    onMoneyStateChanged(randomMoney)
-                    delay(3000)
-                    onMoneyStateChanged("")
-                    time = 3
                 }
             })
     }
